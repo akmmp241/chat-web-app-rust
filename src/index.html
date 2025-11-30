@@ -3,51 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axum Chat</title>
+    <title>citchat</title>
     <style>
         body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
         #chat-box { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .message { margin-bottom: 5px; padding: 5px; background: #f0f0f0; border-radius: 4px; }
+        .message { display: flex; justify-content: center; gap: 10px; margin-bottom: 5px; padding: 5px; }
+        .text { margin-bottom: 5px; padding: 5px; background: #f0f0f0; border-radius: 4px; width: 100%;}
+        .usn { margin-bottom: 5px; padding: 5px; border-radius: 4px; width: 100%; flex: 1;}
         #input-area { display: flex; gap: 10px; }
         input { flex-grow: 1; padding: 8px; }
         button { padding: 8px 16px; cursor: pointer; }
     </style>
 </head>
 <body>
-<h2>Axum WebSocket Chat</h2>
+<h2>Citchat</h2>
 
 <div id="chat-box"></div>
 
 <div id="input-area">
+    <input type="text" id="username" placeholder="Masukkan username..." autocomplete="off">
     <input type="text" id="msg-input" placeholder="Ketik pesan..." autocomplete="off">
-    <button onclick="send_message()">Kirim</button>
+    <button onclick="send_message()" id="btn-send" disabled>Kirim</button>
 </div>
 
 <script>
     const chatBox = document.getElementById('chat-box');
     const input = document.getElementById('msg-input');
+    const btnSend = document.getElementById('btn-send');
+    const username = document.getElementById('username');
 
     const ws = new WebSocket("ws://" + window.location.host + "/ws");
 
     ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+
+        const usernameDiv = document.createElement('div');
+        usernameDiv.className = 'usn';
+        usernameDiv.innerText = data.username;
+
+        const textDiv = document.createElement('div');
+        textDiv.className = 'text';
+        textDiv.innerText = data.message;
+
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message';
-        msgDiv.innerText = event.data;
+        msgDiv.appendChild(usernameDiv);
+        msgDiv.appendChild(textDiv);
+
         chatBox.appendChild(msgDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 
     function send_message() {
         const text = input.value;
-        if (text.trim() !== "") {
-            ws.send(text);
+        const usn = username.value;
+
+        if (text.trim() !== "" && usn.trim() !== "") {
+            const payload = {
+                username: usn,
+                message: text
+            }
+            ws.send(JSON.stringify(payload));
             input.value = "";
         }
     }
 
+    input.addEventListener("input", function(event) {
+        btnSend.disabled = input.value.trim() === "" || username.value.trim() === "";
+    })
+
     input.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             send_message();
+        }
+    });
+
+    username.addEventListener("input", function() {
+        btnSend.disabled = username.value.trim() === "" || input.value.trim() === "";
+    })
+
+    username.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            btnSend.click();
         }
     });
 </script>

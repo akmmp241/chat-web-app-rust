@@ -1,3 +1,5 @@
+mod dto;
+
 use std::sync::Arc;
 use axum::extract::{State, WebSocketUpgrade};
 use axum::response::{Html, IntoResponse};
@@ -6,6 +8,8 @@ use axum::extract::ws::{Message, WebSocket};
 use axum::routing::get;
 use futures::{SinkExt, StreamExt};
 use log::{error, info};
+use validator::Validate;
+use dto::MessageDto as MessageDto;
 
 struct AppState {
     tx: tokio::sync::broadcast::Sender<String>,
@@ -20,7 +24,15 @@ async fn handle_socket(socket: WebSocket, state: Arc<AppState>) {
 
     let mut send_task = tokio::spawn(async move {
         while let Ok(msg) = rx.recv().await {
-            info!("sending message: {}", msg);
+
+            let message_dto: MessageDto = serde_json::from_str(&msg).unwrap();
+
+            if message_dto.validate().is_err() {
+                error!("invalid message: {}", msg);
+                continue;
+            }
+
+            info!("sending message: {}", message_dto.message);
             if sender.send(Message::Text(msg.into())).await.is_err() {
                 break;
             }
