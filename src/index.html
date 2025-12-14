@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citchat</title>
+    <title>Citchat - Registrasi Sementara</title>
     <style>
         :root {
             --primary-color: #6366f1; /* Indigo */
             --primary-hover: #4f46e5;
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --chat-bg: #ffffff;
-            --bubble-self: #6366f1;
-            --bubble-other: #f3f4f6;
-            --text-self: #ffffff;
-            --text-other: #1f2937;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --warning-bg: #fff7ed;
+            --warning-text: #9a3412;
+            --warning-border: #fdba74;
             --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
@@ -29,282 +30,185 @@
             padding: 1rem;
         }
 
-        /* Main Container */
-        .chat-container {
-            background: var(--chat-bg);
+        /* Container mirip chat-container tapi lebih ramping untuk form */
+        .auth-container {
+            background: var(--card-bg);
             width: 100%;
-            max-width: 500px;
-            height: 90vh; /* Takes up most of the screen height */
+            max-width: 400px;
+            padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Header */
-        header {
-            padding: 15px 20px;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-
-        header h2 {
-            font-size: 1.2rem;
-            color: #333;
-            font-weight: 700;
-        }
-
-        .user-setup {
-            width: 40%;
-        }
-
-        .user-setup input {
-            width: 100%;
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            outline: none;
-            transition: border 0.3s;
             text-align: center;
-        }
-
-        .user-setup input:focus { border-color: var(--primary-color); }
-
-        /* Chat Area */
-        #chat-box {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            background-color: #f9fafb;
-        }
-
-        /* Scrollbar styling */
-        #chat-box::-webkit-scrollbar { width: 6px; }
-        #chat-box::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
-
-        /* Messages */
-        .message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            position: relative;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            word-wrap: break-word;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .sender-name {
-            font-size: 0.75rem;
-            margin-bottom: 4px;
-            opacity: 0.8;
-            font-weight: 600;
-            display: block;
+        h2 {
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
         }
 
-        /* Self Messages (Right) */
-        .message.self {
-            align-self: flex-end;
-            background-color: var(--bubble-self);
-            color: var(--text-self);
-            border-bottom-right-radius: 2px;
-        }
-        .message.self .sender-name { color: #e0e7ff; text-align: right; display: none; /* Hide own name to look cleaner */ }
-
-        /* Other Messages (Left) */
-        .message.other {
-            align-self: flex-start;
-            background-color: var(--bubble-other);
-            color: var(--text-other);
-            border-bottom-left-radius: 2px;
-            border: 1px solid #e5e7eb;
-        }
-        .message.other .sender-name { color: var(--primary-color); }
-
-        /* Input Area */
-        #input-area {
-            padding: 15px;
-            background: #fff;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        #msg-input {
-            flex-grow: 1;
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 24px;
-            outline: none;
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
             font-size: 0.95rem;
+        }
+
+        /* Info Box 15 Menit */
+        .timer-info {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+            border: 1px solid #c7d2fe;
+        }
+
+        .timer-info svg {
+            min-width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px; /* Konsisten dengan bubble chat */
+            font-size: 1rem;
+            outline: none;
             transition: all 0.3s;
         }
 
-        #msg-input:focus {
+        input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
         }
 
-        #btn-send {
+        /* Button Styling */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 12px 18px;
-            border-radius: 50%; /* Circle button */
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-top: 10px;
         }
 
-        #btn-send:hover:not(:disabled) { background-color: var(--primary-hover); }
-        #btn-send:active:not(:disabled) { transform: scale(0.95); }
+        .btn-submit:hover { background-color: var(--primary-hover); }
+        .btn-submit:active { transform: scale(0.98); }
 
-        #btn-send:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            opacity: 0.7;
+        /* Footer Link */
+        .auth-footer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
-        /* SVG Icon for Button */
-        .send-icon { width: 20px; height: 20px; fill: currentColor; }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .chat-container { height: calc(100vh - 2rem); border-radius: 0; }
-            .message { max-width: 85%; }
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
         }
+
+        .auth-footer a:hover { text-decoration: underline; }
+
     </style>
 </head>
 <body>
 
-<div class="chat-container">
-    <header>
-        <h2>Citchat</h2>
-        <div class="user-setup">
-            <input type="text" id="username" placeholder="Username" autocomplete="off">
-        </div>
-    </header>
+<div class="auth-container">
+    <h2>Citchat</h2>
+    <p class="subtitle">Buat identitas sementara Anda</p>
 
-    <div id="chat-box">
-        <div class="message other">
-            <span class="sender-name">System</span>
-            Selamat datang di Citchat! Masukkan username di atas untuk mulai.
-        </div>
+    <div class="timer-info">
+        <svg viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+        </svg>
+        <span>
+                <strong>Perhatian:</strong> Akun ini akan otomatis dihapus dalam <strong>15 menit</strong> setelah pembuatan.
+            </span>
     </div>
 
-    <div id="input-area">
-        <input type="text" id="msg-input" placeholder="Ketik pesan..." autocomplete="off">
-        <button onclick="send_message()" id="btn-send" disabled>
-            <svg class="send-icon" viewBox="0 0 24 24">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-            </svg>
-        </button>
-    </div>
+    <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="cth: hantu_rimba" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Minimal 4 karakter" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Buat Akun Sementara</button>
+    </form>
 </div>
 
 <script>
-    const chatBox = document.getElementById('chat-box');
-    const input = document.getElementById('msg-input');
-    const btnSend = document.getElementById('btn-send');
-    const usernameInput = document.getElementById('username');
+    function handleRegister(event) {
+        event.preventDefault();
 
-    // Safe WebSocket connection
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const ws = new WebSocket(protocol + window.location.host + "/ws");
+        const usn = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        const btn = document.querySelector('.btn-submit');
 
-    ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        addMessageToUI(data.username, data.message);
-    };
+        // Simple Client-side Validation
+        if(pass.length < 4) {
+            alert("Password terlalu pendek!");
+            return;
+        }
 
-    ws.onopen = () => console.log("Connected to Chat Server");
-    ws.onclose = () => console.log("Disconnected");
+        // Simulasi Loading
+        btn.innerText = "Memproses...";
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
 
-    function addMessageToUI(user, text) {
-        const msgDiv = document.createElement('div');
-        const nameSpan = document.createElement('span');
+        const payload = {
+            username: usn,
+            password: pass,
+        };
 
-        // Determine if message is Self or Other
-        const currentUser = usernameInput.value.trim();
-        const isSelf = user === currentUser;
-
-        msgDiv.className = isSelf ? 'message self' : 'message other';
-
-        nameSpan.className = 'sender-name';
-        nameSpan.innerText = user;
-
-        msgDiv.appendChild(nameSpan);
-        msgDiv.appendChild(document.createTextNode(text));
-
-        chatBox.appendChild(msgDiv);
-
-        // Smooth scroll to bottom
-        chatBox.scrollTo({
-            top: chatBox.scrollHeight,
-            behavior: 'smooth'
-        });
-    }
-
-    function send_message() {
-        const text = input.value;
-        const usn = usernameInput.value;
-
-        if (text.trim() !== "" && usn.trim() !== "") {
-            const payload = {
-                username: usn,
-                message: text
-            };
-
-            // Check if WebSocket is open before sending
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify(payload));
-                input.value = "";
-                checkInputState(); // Reset button state
-            } else {
-                alert("Connection lost. Please refresh.");
+        fetch('http://localhost:3000', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json'
             }
-        }
+        }).then(res => res.json()).then(_ => {
+            window.location.href = `/`;
+        });
+
     }
-
-    // Input Validation Logic to Enable/Disable Button
-    function checkInputState() {
-        const hasText = input.value.trim() !== "";
-        const hasUser = usernameInput.value.trim() !== "";
-        btnSend.disabled = !(hasText && hasUser);
-    }
-
-    input.addEventListener("input", checkInputState);
-    usernameInput.addEventListener("input", checkInputState);
-
-    input.addEventListener("keypress", function(event) {
-        if (event.key === "Enter" && !btnSend.disabled) {
-            send_message();
-        }
-    });
-
-    usernameInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter" && !btnSend.disabled) {
-            input.focus(); // Jump to message input on enter
-        }
-    });
-
 </script>
 </body>
 </html>

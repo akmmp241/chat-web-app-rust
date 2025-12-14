@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Room - Citchat</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .input-group input {
+            width: 100%;
+            margin-top: 6px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+            transition: border 0.25s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Buat Room Citchat</h1>
+
+    <form onsubmit="createRoom(event)">
+        <div class="input-group">
+            <label for="roomname">Nama Room</label>
+            <input type="text" id="roomname" placeholder="contoh: ruang-belajar" autocomplete="off">
+        </div>
+
+        <button type="submit" id="btn-create" disabled>Buat Room</button>
+    </form>
+</div>
+
+<script>
+    const roomInput = document.getElementById('roomname');
+    const btnCreate = document.getElementById('btn-create');
+
+    function checkState() {
+        btnCreate.disabled = roomInput.value.trim() === "";
+    }
+
+    roomInput.addEventListener("input", checkState);
+
+    roomInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter" && !btnCreate.disabled) {
+            createRoom();
+        }
+    });
+
+    function createRoom(e) {
+        e.preventDefault();
+
+        const roomName = roomInput.value.trim();
+
+        const normalized = roomName.replace(/\s+/g, "-");
+
+        const payload = {
+            room: normalized
+        };
+
+        fetch('http://localhost:3000/chat', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(data => {
+            window.location.href = `/chat?room=${data.room}`;
+        });
+    }
+</script>
+
+</body>
+</html>
